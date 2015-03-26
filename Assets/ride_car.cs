@@ -7,7 +7,7 @@ public class ride_car : MonoBehaviour {
 	private float move_speed;
 
 	public GameObject obj_character;
-	private Character str_char;
+//	private Character str_char;
 
 	public bool	ride_on;
 
@@ -16,7 +16,7 @@ public class ride_car : MonoBehaviour {
 		//car set.
 
 		ride_on = false;
-		str_char = obj_character.GetComponent<Character> (); 
+//		str_char = obj_character.GetComponent<Character> (); 
 	}
 	
 	public void ride_car_Update ()
