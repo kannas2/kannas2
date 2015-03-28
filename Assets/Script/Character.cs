@@ -16,6 +16,7 @@ public class Character : MonoBehaviour {
 	
 	private bool 		walking = false;
 	public  bool 		char_on = true;
+	public 	bool		eat_ice = false;
 	
 	public  float		C_speed = 1.0f;
 
@@ -24,8 +25,6 @@ public class Character : MonoBehaviour {
 
 	public void	Character_Init ()
 	{
-		//dis_p = {.0f,.0f,.0f,.0f};
-
 		//player p and dir set
 		for (int i=0; i<4; i++) 
 		{
@@ -43,7 +42,7 @@ public class Character : MonoBehaviour {
 		//player p_dir set
 		for(int i=0; i<4; i++)
 		{
-			float x_value = Random.Range(-1.0f,2.0f);
+			float x_value = Random.Range(-0.7f,0.7f);
 			float y_value = Random.Range(0.5f,2.0f);
 			
 			player_p_dir[i].transform.position = new Vector3(transform.position.x + x_value,
@@ -109,15 +108,22 @@ public class Character : MonoBehaviour {
 				//ice cream postion update.
 				ice_cream_ (ice_cream_direction);
 				
-				if (Input.GetKeyDown (KeyCode.F)) {
-					DestroyObject (ice_cream);
+
+					if(eat_ice == true)
+					{
+						Debug.Log("아이스크림 먹음");
+						DestroyObject (ice_cream);
+					}
 				}
-			}
+
 		}
 
 		dir_character_p ();
 	}
-	
+	/*
+	 *함수로 빼지말고 그냥 방향키마다 포지션값 주면 되는거아닌가...
+	 *아이스크림이 없어졌을 경우 때문에 함수로 따로 빼놓음.
+	 */
 	void ice_cream_(int position)
 	{
 		switch (position)
@@ -136,37 +142,19 @@ public class Character : MonoBehaviour {
 			break;
 		}
 	}
-
+	
 	void dir_character_p()
 	{
-		for (int i=0; i<4; i++)
+		for (int i=0; i<4; i++) 
 		{
 			player_p [i].GetComponent<Renderer> ().enabled = true;
 
-			if (dis_p [0] >= 0.51f)
+			if (dis_p [i] >= 0.1f)
 			{
-				//player_p [i].GetComponent<Renderer> ().enabled = true;
-				player_p [0].transform.Translate (dir_p [0] * (0.5f * Time.deltaTime));
-			}
-
-			if (dis_p [1] >= 0.51f)
-			{
-				//player_p [i].GetComponent<Renderer> ().enabled = true;
-				player_p [1].transform.Translate (dir_p [1] * (0.5f * Time.deltaTime));
-			}
-
-			if (dis_p [2] >= 0.51f)
-			{
-				//player_p [i].GetComponent<Renderer> ().enabled = true;
-				player_p [2].transform.Translate (dir_p [2] * (0.5f * Time.deltaTime));
-			}
-
-			if (dis_p [3] >= 0.51f)
-			{
-				//player_p [i].GetComponent<Renderer> ().enabled = true;
-				player_p [3].transform.Translate (dir_p [3] * (0.5f * Time.deltaTime));
+				player_p [i].transform.Translate (dir_p [i] * 0.10f);
 			}
 		}
 	}
 }
+
 
