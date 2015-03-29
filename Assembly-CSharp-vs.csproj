@@ -49,6 +49,7 @@
      <Compile Include="Assets\Script\Character.cs" />
      <Compile Include="Assets\Script\Game_Manager.cs" />
      <Compile Include="Assets\Script\ride_car.cs" />
+     <Compile Include="Assets\Script\signal_lamp.cs" />
      <Compile Include="Assets\Script\speed_test.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
