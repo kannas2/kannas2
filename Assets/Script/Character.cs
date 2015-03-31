@@ -18,7 +18,7 @@ public class Character : MonoBehaviour {
 	public  bool 		char_on = true;
 	public 	bool		eat_ice = false;
 	
-	public  float		C_speed = 1.0f;
+	public  float		C_speed = 5.0f;
 	public  bool		dir_p_set;
 
 	//파편 방향과 거리.
@@ -128,7 +128,7 @@ public class Character : MonoBehaviour {
 		}
 		//test;
 		if (dir_p_set == false) {
-			dir_set (1);
+			dir_set (2);
 		}
 
 		dir_character_p ();
@@ -165,7 +165,7 @@ public class Character : MonoBehaviour {
 		switch(num)
 		{
 		case 1:
-
+			//y만 랜덤이고 x는 일정 간격.
 			x_value = -1.0f;
 			for(int i=0; i<4; i++)
 			{
@@ -182,7 +182,7 @@ public class Character : MonoBehaviour {
 			break;
 
 		case 2:
-
+			//랜덤으로 4방향 퍼지게 하는 코드. 근데 if문이 너무 많아서 좋지 않을것 같음.
 			for(int i=0; i<4; i++)
 			{
 				if(i==0)
@@ -210,7 +210,7 @@ public class Character : MonoBehaviour {
 				                                                 transform.position.y + y_value,
 				                                                 transform.position.z - 0.5f);
 			}
-			/*
+			/* 일정 간격으로 파편이 튕기게끔 하는 코드.
 			for(int i=0; i<4; i++)
 			{
 				player_p_dir[i].transform.position = new Vector3(transform.position.x + x_value,
