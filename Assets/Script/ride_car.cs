@@ -14,6 +14,7 @@ public class ride_car : MonoBehaviour {
 	public void ride_car_Init ()
 	{
 		//car set.
+		transform.position = new Vector3 (-0.58f, -6.61f, .0f);
 
 		ride_on = false;
 //		str_char = obj_character.GetComponent<Character> (); 

@@ -19,12 +19,19 @@ public class Character : MonoBehaviour {
 	public 	bool		eat_ice = false;
 	
 	public  float		C_speed = 1.0f;
+	public  bool		dir_p_set;
 
+	//파편 방향과 거리.
 	private float[]     dis_p = new float[4];
 	private Vector3[]   dir_p = new Vector3[4];
 
 	public void	Character_Init ()
 	{
+		dir_p_set = false;
+
+		//character set postion
+		//transform.position = new Vector3 (2.18f, -6.64f, .0f);
+
 		//player p and dir set
 		for (int i=0; i<4; i++) 
 		{
@@ -40,6 +47,7 @@ public class Character : MonoBehaviour {
 		}
 		
 		//player p_dir set
+		/* 함수로 빼놨음.
 		for(int i=0; i<4; i++)
 		{
 			float x_value = Random.Range(-0.7f,0.7f);
@@ -49,12 +57,14 @@ public class Character : MonoBehaviour {
 			                                                 transform.position.y + y_value,
 			                                                 transform.position.z + 1.0f);
 		}
-
+		*/
+		/*
 		for (int i=0; i<4; i++) 
 		{	//player p - dir.
 			dis_p[i] = Vector2.Distance(player_p_dir[i].transform.position, player_p[i].transform.position);
 			dir_p[i] = (player_p_dir[i].transform.position - player_p[i].transform.position).normalized;
 		}
+		*/
 
 		animator = GetComponent<Animator>();
 	}
@@ -115,7 +125,10 @@ public class Character : MonoBehaviour {
 						DestroyObject (ice_cream);
 					}
 				}
-
+		}
+		//test;
+		if (dir_p_set == false) {
+			dir_set (1);
 		}
 
 		dir_character_p ();
@@ -142,7 +155,92 @@ public class Character : MonoBehaviour {
 			break;
 		}
 	}
-	
+
+	void dir_set(int num)
+	{
+		float x_value = .0f;
+		float y_value = .0f;
+
+		//캐릭터 파편 위치 set
+		switch(num)
+		{
+		case 1:
+
+			x_value = -1.0f;
+			for(int i=0; i<4; i++)
+			{
+				x_value+= 0.5f;
+				y_value = Random.Range(0.5f,2.0f);
+
+				player_p_dir[i].transform.position = new Vector3(transform.position.x + x_value,
+				                                                 transform.position.y + y_value,
+				                                                 transform.position.z - 0.5f);
+
+				Debug.Log("1번 파편 위치 : " + x_value);
+			}
+			dir_p_set = true;
+			break;
+
+		case 2:
+
+			for(int i=0; i<4; i++)
+			{
+				if(i==0)
+				{
+					x_value = Random.Range(.0f,-1.2f);
+					y_value = Random.Range(.0f, 1.2f);
+				}
+				else if(i==1)
+				{
+					x_value = Random.Range(.0f, 1.2f);
+					y_value = Random.Range(.0f, 1.2f);
+				}
+				else if(i==2)
+				{
+					x_value = Random.Range(.0f,-1.2f);
+					y_value = Random.Range(.0f,-1.2f);
+				}
+				else if(i==3)
+				{
+					x_value = Random.Range(.0f, 1.2f);
+					y_value = Random.Range(.0f,-1.2f);
+				}
+
+				player_p_dir[i].transform.position = new Vector3(transform.position.x + x_value,
+				                                                 transform.position.y + y_value,
+				                                                 transform.position.z - 0.5f);
+			}
+			/*
+			for(int i=0; i<4; i++)
+			{
+				player_p_dir[i].transform.position = new Vector3(transform.position.x + x_value,
+				                                                 transform.position.y + y_value,
+				                                                 transform.position.z - 0.5f);
+				if(i<2)
+				{
+					//이거 초기화 되는지 나중에 확인해볼것.
+					x_value += 1.5f;
+				}
+				else if(i>=2)
+				{
+					if(i==2)
+					{
+						x_value -= 0.5f;
+						return;
+					}
+					y_value -= 0.5f;
+				}
+				Debug.Log("2번 파편 위치 : " + x_value);
+			}
+			*/
+			dir_p_set = true;
+			break;
+
+		}
+		//dir_character_p 호출.
+	}
+
+	//파편 움직이는 함수.
 	void dir_character_p()
 	{
 		for (int i=0; i<4; i++) 
@@ -151,7 +249,7 @@ public class Character : MonoBehaviour {
 
 			if (dis_p [i] >= 0.1f)
 			{
-				player_p [i].transform.Translate (dir_p [i] * 0.10f);
+				player_p [i].transform.Translate (dir_p [i] * 0.20f);
 			}
 		}
 	}
