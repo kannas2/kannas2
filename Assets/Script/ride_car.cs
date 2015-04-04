@@ -1,16 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ride_car : MonoBehaviour {
+public class ride_car : Singleton<ride_car> {
 
 	private float      move_speed;
 	public  GameObject obj_character;
 
 	private float      directionX;
 	private float      directionY;
-
-	//	private Character str_char;
-	public bool	ride_on;
 
 	public void ride_car_Init ()
 	{
@@ -21,8 +18,6 @@ public class ride_car : MonoBehaviour {
 		transform.position = new Vector3 (-0.58f, -6.61f, .0f);
 
 		move_speed = 3.0f;
-		ride_on = false;
-//		str_char = obj_character.GetComponent<Character> (); 
 	}
 	
 	public void ride_car_Update ()
@@ -32,16 +27,12 @@ public class ride_car : MonoBehaviour {
 			transform.rotation = Quaternion.Euler(.0f,.0f,90.0f);;
 			directionX = 0;
 			directionY = 1;
-			//directionX -= 1;
-			//directionY = 0;
 		}
 		if (Input.GetKeyDown (KeyCode.RightArrow))
 		{
 			transform.rotation =  Quaternion.Euler(.0f,.0f,-90.0f);
 			directionX = 0;
 			directionY = 1;
-			//directionX += 1;
-			//directionY = 0;
 		}
 		if (Input.GetKeyDown (KeyCode.DownArrow))
 		{
@@ -49,8 +40,6 @@ public class ride_car : MonoBehaviour {
 
 			directionX = 0;
 			directionY = 1;
-			//directionX = 0;
-			//directionY -= 1;
 		}
 		if (Input.GetKeyDown (KeyCode.UpArrow))
 		{

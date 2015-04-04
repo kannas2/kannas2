@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{FDEAD480-6DB0-1646-5E2E-28DE22532F14}</ProjectGuid>
+	<ProjectGuid>{D065D629-207F-2244-7AE3-AF9422BAE092}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -46,8 +46,13 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Script\Animation_Manager.cs" />
+     <Compile Include="Assets\Script\Camera_Manager.cs" />
      <Compile Include="Assets\Script\Character.cs" />
+     <Compile Include="Assets\Script\Event_Manager.cs" />
      <Compile Include="Assets\Script\Game_Manager.cs" />
+     <Compile Include="Assets\Script\Singleton.cs" />
+     <Compile Include="Assets\Script\Sound_Manager.cs" />
      <Compile Include="Assets\Script\ride_car.cs" />
      <Compile Include="Assets\Script\signal_lamp.cs" />
      <Compile Include="Assets\Script\speed_test.cs" />

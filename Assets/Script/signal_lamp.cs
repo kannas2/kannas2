@@ -5,8 +5,8 @@ public class signal_lamp : MonoBehaviour {
 
 	public  GameObject red_signal_lamp;
 	public  GameObject green_signal_lamp;
-
-	public  GameObject check_cross_line;
+	
+    public  GameObject check_cross_line;
 	private bool	   loop_lamp;	
 
 	void Start () 
