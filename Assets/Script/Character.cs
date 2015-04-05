@@ -3,99 +3,143 @@ using System.Collections;
 
 public class Character : Singleton<Character>
 {
-	public  GameObject 	ice_cream;
-	private int 		ice_cream_direction;
+    public GameObject ice_cream;
+    public Sprite front_char;
 
-	protected Animator  animator;
-	
-	private float 		directionX = 0;
-	private float		directionY = 0;
-	
-	private bool 		walking = false;
-	public  bool 		char_on = true;
-	
-	public  float		C_speed = 5.0f;
+    protected Animator animator;
 
-    private Event_Manager str_Event;
+    // 벽 체크 변수.
+    public Transform[] wall_check;
 
-	public void	Character_Init ()
-	{
-        str_Event = Event_Manager.Instance;
+    public int move_max = 0;
+    public int move_pos = 0;
 
-		//character start postion
-		//transform.position = new Vector3 (2.18f, -6.64f, .0f);
+    private float directionX = 0;
+    private float directionY = 0;
 
-		animator = GetComponent<Animator>();
-	}
-	
-	public void Character_Update () 
-	{
-		if (char_on == true) {
-			float h = Input.GetAxisRaw ("Horizontal");
-			float v = Input.GetAxisRaw ("Vertical");
-			
-			walking = true;
-			
-			//right
-			if (h > 0) {
-				directionX = 1;
-				directionY = 0;
-				ice_cream_direction = 1;
-			}//left
-			else if (h < 0) {
-				directionX = -1;
-				directionY = 0;
-				ice_cream_direction = 2;
-			}//front 
-			else if (v > 0) {
-				directionX = 0;
-				directionY = 1;
-				ice_cream_direction = 3;
-			}//back 
-			else if (v < 0) {
-				directionX = 0;
-				directionY = -1;
-				ice_cream_direction = 4;
-			} else {
-				walking = false;
-			}
-			if (walking) {
-				transform.Translate (new Vector3 (directionX, directionY, 0) * Time.deltaTime * C_speed);
-			}
-			animator.SetFloat ("DirectionX", directionX);
-			animator.SetFloat ("DirectionY", directionY);
-			animator.SetBool ("Walking", walking);
-			
-			if (GameObject.Find ("Player_ice_cream")) 
-			{
-				//ice cream postion update.
-				//ice_cream_ (ice_cream_direction);
-			}
-		}
-        str_Event.character_event(Event_Manager.Event_.trash);
-	}
-	/*
-	 *함수로 빼지말고 그냥 방향키마다 포지션값 주면 되는거아닌가...
-	 *아이스크림이 없어졌을 경우 때문에 함수로 따로 빼놓음.
-	void ice_cream_(int position)
-	{
-		switch (position)
-		{
-			//right
-		case 1: ice_cream.transform.position = new Vector3(transform.position.x, transform.position.y - 0.07f , transform.position.z - 1.0f);
-			break;
-			//left
-		case 2:	ice_cream.transform.position = new Vector3(transform.position.x, transform.position.y- 0.07f, transform.position.z-1.0f);
-			break;
-			//front
-		case 3:	ice_cream.transform.position = new Vector3(transform.position.x + 0.095f, transform.position.y-0.07f, transform.position.z);
-			break;
-			//back
-		case 4:	ice_cream.transform.position = new Vector3(transform.position.x -0.093f, transform.position.y-0.07f, transform.position.z-1.0f);
-			break;
-		}
-	}
-    */
+    private bool walking = false;
+    public bool char_on = true;
+
+    private bool c_move;
+
+    public float C_speed = 4.0f;
+
+    private Game_Manager str_Game_mag;
+
+    public void Character_Init()
+    {
+        c_move = false;
+
+        str_Game_mag = Game_Manager.Instance;
+
+        //character start postion
+        transform.position = new Vector3(1.29f, -7.62f, -1.0f);
+
+
+        //위치 초기화.
+        wall_check[0].transform.position = new Vector3(transform.position.x,
+            transform.position.y,
+            transform.position.z);
+
+
+        animator = GetComponent<Animator>();
+
+        //애니메이션 루프 off
+        animator.applyRootMotion = false;
+    }
+
+    public void Character_Update()
+    {
+        if (char_on == true)
+        {
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
+
+            walking = true;
+
+            //right
+            if (h > 0)
+            {
+                directionX = 1;
+                directionY = 0;
+                wall_check[0].transform.position = new Vector3(transform.position.x + 0.5f,
+                    transform.position.y,
+                    transform.position.z);
+            }//left
+            else if (h < 0)
+            {
+                directionX = -1;
+                directionY = 0;
+                wall_check[0].transform.position = new Vector3(transform.position.x - 0.5f,
+                    transform.position.y,
+                    transform.position.z);
+            }//front 
+            else if (v > 0)
+            {
+                directionX = 0;
+                directionY = 1;
+                wall_check[0].transform.position = new Vector3(transform.position.x,
+                    transform.position.y + 1.1f,
+                    transform.position.z);
+            }//back 
+            else if (v < 0)
+            {
+                directionX = 0;
+                directionY = -1;
+                wall_check[0].transform.position = new Vector3(transform.position.x,
+                    transform.position.y - 1.1f,
+                    transform.position.z);
+            }
+            else
+            {
+                walking = false;
+            }
+            if (walking)
+            {
+                transform.Translate(new Vector3(directionX, directionY, 0) * Time.deltaTime * C_speed);
+            }
+
+            animator.SetFloat("DirectionX", directionX);
+            animator.SetFloat("DirectionY", directionY);
+            animator.SetBool("Walking", walking);
+
+            if (GameObject.Find("Player_ice_cream"))
+            {
+                //ice cream postion update.
+                //ice_cream_ (ice_cream_direction);
+            }
+        }
+        //str_Event.character_event(Event_Manager.Event_.trash);
+
+        c_move = Physics2D.Linecast(transform.position, wall_check[0].transform.position, 1 << LayerMask.NameToLayer("Wall"));
+        Debug.DrawLine(transform.position, wall_check[0].transform.position, Color.green);
+
+        //캐릭터 벽과 충돌 처리 예외처리.
+        if (c_move)
+        {
+            C_speed = .0f;
+        }
+        else
+        {
+            C_speed = 4.0f;
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        if (coll.gameObject.tag == "cross")
+        {
+            //캐릭터 업데이트 off.
+            str_Game_mag.char_update = false;
+            animator.enabled = false;
+            animator.SetBool("Walking", false); //못움직이게.
+            GetComponent<Collider2D>().enabled = false;
+
+            //캐릭터 차량쪽 방향을 보게..
+            transform.GetComponent<SpriteRenderer>().sprite = front_char;
+
+            //manager loop on
+            str_Game_mag.cross_Event = true;
+        }
+    }
 }
-
-

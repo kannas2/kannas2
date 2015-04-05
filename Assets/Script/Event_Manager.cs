@@ -33,11 +33,13 @@ public class Event_Manager : Singleton<Event_Manager>
 
     private ride_car  str_ride_car;
     private Character str_char;
+    //private Game_Manager str_Game_mag;
 
     public void Event_Init()
     {
         str_ride_car = ride_car.Instance;
         str_char = Character.Instance;
+        //str_Game_mag = Game_Manager.Instance;
 
         //1회만 셋팅.
         dir_p_set = false;
@@ -62,13 +64,8 @@ public class Event_Manager : Singleton<Event_Manager>
         {
             player_p[i].GetComponent<Renderer>().enabled = false;
 
-            player_p[i].transform.position = new Vector3(str_char.transform.position.x,
-                                                         str_char.transform.position.y,
-                                                         str_char.transform.position.z + 1.0f);
-
-            player_p_dir[i].transform.position = new Vector3(str_char.transform.position.x,
-                                                             str_char.transform.position.y,
-                                                             str_char.transform.position.z + 1.0f);
+            player_p[i].transform.position = str_char.transform.position;
+            player_p_dir[i].transform.position = str_char.transform.position;
         }
     }
 
@@ -80,8 +77,6 @@ public class Event_Manager : Singleton<Event_Manager>
             dis_p[i] = Vector2.Distance(player_p_dir[i].transform.position, player_p[i].transform.position);
             dir_p[i] = (player_p_dir[i].transform.position - player_p[i].transform.position).normalized;
         }
-
-        Debug.Log("steel dis :" + dis_steel_);
     }
 
    public void character_event(Event_ event_)
@@ -119,14 +114,13 @@ public class Event_Manager : Singleton<Event_Manager>
                     car_dir = (str_ride_car.transform.position - dump_car.transform.position).normalized;
                 }
                 //여기 까지는 충돌 차량 설정.
-                if (car_dis >= 1.0f)
+                if (car_dis >= 2.5f)
                 {
                     if (GameObject.Find("dump_car(Clone)"))
                     {
                         GameObject Dump_car = GameObject.Find("dump_car(Clone)");
-                        Dump_car.transform.Translate(car_dir * (dump_speed * Time.deltaTime));
                         car_dis = Vector2.Distance(str_ride_car.transform.position, Dump_car.transform.position);
-                        Debug.Log(car_dis);
+                        Dump_car.transform.Translate(car_dir * (dump_speed * Time.deltaTime));
                     }
                 }
                 else
@@ -139,6 +133,47 @@ public class Event_Manager : Singleton<Event_Manager>
 
             case Event_.cross_line:
                 {
+
+                    //나중에 함수로 빼서 포지션 값만 보내면 자동으로 셋팅 되게끔 .. 재활용 해볼것.
+                    if (car_attack == false) //생성할때 포지션 설정.
+                    {
+                        dump_car.transform.position = new Vector3(str_char.transform.position.x,
+                                                                  str_char.transform.position.y - 10.0f,
+                                                                  str_char.transform.position.z);
+                    }
+
+                    //create_frefab 거리 방향 구함.
+                    if (dump_on == false)
+                    {
+                        dump_on = true; //1회 생성. 프리팹,위치,회전
+                        Instantiate(dump_car, dump_car.transform.position, str_char.transform.rotation);
+                        //플레이어 차량은 멈춰있는 상태.
+                        car_dis = Vector2.Distance(str_char.transform.position, dump_car.transform.position);
+                        car_dir = (str_char.transform.position - dump_car.transform.position).normalized;
+                    }
+
+                    if (car_dis >= 2.4f)
+                    {
+                        if (GameObject.Find("dump_car(Clone)"))
+                        {
+                            GameObject Dump_car = GameObject.Find("dump_car(Clone)");
+                            car_dis = Vector2.Distance(str_char.transform.position, Dump_car.transform.position);
+                            Dump_car.transform.Translate(car_dir * (dump_speed * Time.deltaTime));
+
+                            Debug.Log("cross Line : " + car_dis);
+                        }
+                    }
+                    else if (car_dis <= 2.4f)
+                    {
+                        if (GameObject.Find("Player"))
+                        {
+                            GameObject.Find("Player").GetComponent<SpriteRenderer>().enabled = false;
+                        }
+                        //true가 되는순간 캐릭터 파편 실행
+                        car_attack = true;
+                    }
+
+
                     if (dir_p_set == false)
                     {
                         //y만 랜덤이고 x는 일정 간격.
@@ -152,11 +187,14 @@ public class Event_Manager : Singleton<Event_Manager>
 
                             player_p_dir[i].transform.position = new Vector3(str_char.transform.position.x + x_value,
                                                                              str_char.transform.position.y + y_value,
-                                                                             str_char.transform.position.z - 0.5f);
+                                                                             str_char.transform.position.z - 1.0f);
                         }
                         dir_p_set = true;
                     }
-                    dir_character_p(); //파편 이동함수.
+                    if (car_attack == true)
+                    {
+                        dir_character_p(); //파편 이동함수.
+                    }
                     break;
                 }
 
@@ -194,11 +232,14 @@ public class Event_Manager : Singleton<Event_Manager>
 
                             player_p_dir[i].transform.position = new Vector3(str_char.transform.position.x + x_value,
                                                                              str_char.transform.position.y + y_value,
-                                                                             str_char.transform.position.z - 0.5f);
+                                                                             str_char.transform.position.z - 1.0f);
                         }
                         dir_p_set = true;
                     }
-                    dir_character_p(); //파편 이동함수.
+                    if (steel_attack == true)
+                    {
+                        dir_character_p(); //파편 이동함수.
+                    }
                     break;
                 }
 
@@ -215,6 +256,9 @@ public class Event_Manager : Singleton<Event_Manager>
    //철근이 캐릭터에게 떨어지는 함수.
    void steel_down()
    {
+       //캐릭터 업데이트 off
+       //캐릭터 이미지 off
+
        if (steel_on == false)
        {
            steel_on = true;
@@ -242,10 +286,17 @@ public class Event_Manager : Singleton<Event_Manager>
                dis_steel_ = Vector2.Distance(str_char.transform.position,c_steel_.transform.position);
                //생성된 프리팹 이동.
                c_steel_.transform.Translate(dir_steel_ * (steel_down_speed * Time.deltaTime));
+
+               steel_down_speed += 1.0f;
            }
        }
-       else
+       else if(dis_steel_ <= 1.0f)
        {
+           if (GameObject.Find("Player"))
+           {
+               GameObject.Find("Player").GetComponent<SpriteRenderer>().enabled = false;
+           }
+
            //true가 되는순간 캐릭터가 4방향으로 파편이 튕김.
            steel_attack = true;
        }
@@ -258,7 +309,7 @@ public class Event_Manager : Singleton<Event_Manager>
         {
             player_p[i].GetComponent<Renderer>().enabled = true;
 
-            if (dis_p[i] >= 0.1f)
+            if (dis_p[i] >= 0.2f)
             {
                 player_p[i].transform.Translate(dir_p[i] * 0.20f);
             }
