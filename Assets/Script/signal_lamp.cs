@@ -12,12 +12,11 @@ public class signal_lamp : MonoBehaviour {
 	void Start () 
 	{
 		//postion set.
-		red_signal_lamp.transform.position = new Vector3 (-2.97f, 0.91f, .0f);
-		green_signal_lamp.transform.position = new Vector3 (-2.97f, 1.6f, .0f);
+        red_signal_lamp.transform.position = new Vector3(1.044f, 5.666f, -2f);
+        green_signal_lamp.transform.position = new Vector3(1.044f, 4.688f, -2f);
 	
 		red_signal_lamp.GetComponent<SpriteRenderer> ().enabled = false;
 		green_signal_lamp.GetComponent<SpriteRenderer> ().enabled = false;
-		check_cross_line.GetComponent<SpriteRenderer> ().enabled = false;
 		check_cross_line.GetComponent<BoxCollider2D> ().enabled = false;
 
 		loop_lamp = false;

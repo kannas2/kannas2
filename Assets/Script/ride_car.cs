@@ -8,19 +8,12 @@ public class ride_car : Singleton<ride_car> {
 
 	private float      directionX;
 	private float      directionY;
-    private bool       walking;
-
-    private float Event_car;
 
     //private Event_Manager str_Event_Mag;
     private Game_Manager str_Game_Mag;
 
 	public void ride_car_Init ()
 	{
-        walking = true;
-
-        Event_car = .0f;
-
         //str_Event_Mag = Event_Manager.Instance;
         str_Game_Mag = Game_Manager.Instance;
 
@@ -28,15 +21,13 @@ public class ride_car : Singleton<ride_car> {
 		directionY = .0f;
 
 		//car set.
-        transform.position = new Vector3(-0.43f, -6.8f, -1.0f);
+        transform.position = new Vector3(-0.42f, -6.8f, -1.0f);
 
 		move_speed = 200.0f;
 	}
 	
 	public void ride_car_Update ()
 	{
-        walking = true;
-
         //상하만 요청함.
         float v = Input.GetAxisRaw("Vertical");
 
@@ -47,7 +38,6 @@ public class ride_car : Singleton<ride_car> {
 
             directionX = 0;
             directionY = 1;
-            Event_car -= 1.0f;
 
             move_speed = 3.0f;
         }
@@ -56,8 +46,6 @@ public class ride_car : Singleton<ride_car> {
             transform.rotation = Quaternion.Euler(.0f, .0f, .0f);
             directionX = 0;
             directionY = 1;
-
-            Event_car += 1.0f;
 
             move_speed = 3.0f;
         }
@@ -70,13 +58,14 @@ public class ride_car : Singleton<ride_car> {
         {
             move_speed = 0;
         }
+
         //자동차가 방향키를 손에서 때면 서서히 멈추게 끔 하기를 기획자가 요구함.
         transform.Translate(new Vector3(directionX, directionY, 0) * Time.deltaTime * move_speed);
         
 
         ////////////////////////////////////이동관련////////////////////////////////////////////////
 
-        if (Event_car >= 70.0f)
+        if (transform.position.y >= -1.55f)
         {
             //str_Event.character_event(Event_Manager.Event_.trash);
             //str_Game_Mag.ride_car_update = false; //호출은 계속 해야하니 다른곳에서 off시키는 걸로.

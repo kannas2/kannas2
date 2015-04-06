@@ -6,7 +6,7 @@ public class Character : Singleton<Character>
     public GameObject ice_cream;
     public Sprite front_char;
 
-    protected Animator animator;
+    public Animator animator;
 
     // 벽 체크 변수.
     public Transform[] wall_check;
@@ -22,7 +22,7 @@ public class Character : Singleton<Character>
 
     private bool c_move;
 
-    public float C_speed = 4.0f;
+    public float C_speed = 2.0f;
 
     private Game_Manager str_Game_mag;
 
@@ -41,10 +41,7 @@ public class Character : Singleton<Character>
             transform.position.y,
             transform.position.z);
 
-
         animator = GetComponent<Animator>();
-
-        //애니메이션 루프 off
         animator.applyRootMotion = false;
     }
 
@@ -94,6 +91,7 @@ public class Character : Singleton<Character>
             {
                 walking = false;
             }
+
             if (walking)
             {
                 transform.Translate(new Vector3(directionX, directionY, 0) * Time.deltaTime * C_speed);
@@ -109,7 +107,6 @@ public class Character : Singleton<Character>
                 //ice_cream_ (ice_cream_direction);
             }
         }
-        //str_Event.character_event(Event_Manager.Event_.trash);
 
         c_move = Physics2D.Linecast(transform.position, wall_check[0].transform.position, 1 << LayerMask.NameToLayer("Wall"));
         Debug.DrawLine(transform.position, wall_check[0].transform.position, Color.green);
@@ -121,7 +118,7 @@ public class Character : Singleton<Character>
         }
         else
         {
-            C_speed = 4.0f;
+            C_speed = 2.0f;
         }
     }
 
